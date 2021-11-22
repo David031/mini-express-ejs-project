@@ -13,7 +13,7 @@ app.get('/', function(req, res) {
     { name: 'Moby Dock', organization: "Docker", birth_year: 2013}
   ];
   var tagline = "No programming concept is complete without a cute animal mascot.";
-
+  
   res.render('pages/main', {
     mascots: mascots,
     tagline: tagline
@@ -22,6 +22,10 @@ app.get('/', function(req, res) {
 
 app.get('/about', function(req, res) {
   res.render('pages/about');
+});
+
+app.get('/login', function(req, res) {
+  res.status(200).json({"success":"true"})
 });
 
 app.listen(port, () => {
