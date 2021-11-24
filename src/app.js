@@ -1,33 +1,45 @@
 import express from "express";
+import bodyParser from "body-parser";
+const app = express();
+const port = 4000;
 
-const app = express()
-const port = 4000
+app.set("views", "./src/views");
+app.set("view engine", "ejs");
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
-app.set('views', './src/views');
-app.set('view engine', 'ejs');
-
-app.get('/', function(req, res) {
+app.get("/", function (req, res) {
   var mascots = [
-    { name: 'Sammy', organization: "DigitalOcean", birth_year: 2012},
-    { name: 'Tux', organization: "Linux", birth_year: 1996},
-    { name: 'Moby Dock', organization: "Docker", birth_year: 2013}
+    { name: "Sammy", organization: "DigitalOcean", birth_year: 2012 },
+    { name: "Tux", organization: "Linux", birth_year: 1996 },
+    { name: "Moby Dock", organization: "Docker", birth_year: 2013 },
   ];
-  var tagline = "No programming concept is complete without a cute animal mascot.";
-  
-  res.render('pages/main', {
+  var tagline =
+    "No programming concept is complete without a cute animal mascot.";
+
+  res.render("pages/main", {
     mascots: mascots,
-    tagline: tagline
+    tagline: tagline,
   });
 });
 
-app.get('/about', function(req, res) {
-  res.render('pages/about');
+app.get("/about", function (req, res) {
+  res.render("pages/about");
 });
 
-app.get('/login', function(req, res) {
-  res.status(200).json({"success":"true"})
+app.get("/login", function (req, res) {
+  res.render("pages/login");
+});
+
+app.post("/login", function (req, res) {
+  const { username, password } = req.body;
+  res.render("pages/inventory/index", { username: username });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  console.log(`Example app listening at http://localhost:${port}`);
+});
