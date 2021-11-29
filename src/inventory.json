@@ -1,16 +1,16 @@
 {
-    "id":"123",
-    "name" : "david",
-    "type" : "user",
-    "quantity":"",
-    "photo":"aa",
-    "photo_mimetype":"jpg",
-    "address":{
-        "street":"aberdeen",
-        "building":"lalala",
-        "country":"Hong Kong",
-        "zipcode":"ac",
-        "coord":""
+    "id": "123",
+    "name": "david",
+    "type": "user",
+    "quantity": "",
+    "photo": "aa",
+    "photo_mimetype": "jpg",
+    "address": {
+        "street": "aberdeen",
+        "building": "lalala",
+        "country": "Hong Kong",
+        "zipcode": "ac",
+        "coord": ""
     },
-    "manager":"jimmy"
+    "manager": "jimmy"
 }
