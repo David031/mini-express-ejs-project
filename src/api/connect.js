@@ -1,26 +1,14 @@
-import { MongoClient } from "mongodb";
-import assert from "assert";
-
-const url = 'mongodb+srv://jimmy:xzC659428@cluster0.hnqlx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-const dbName = 'test';
-
-const client = new MongoClient(url);
-
-
+import { client, dbName } from "./client.js";
 
 export function login(name, password) {
+  try {
+    await client.connect();
+    const db = client.db(dbName);
 
-    client.connect((err) => {
-        assert.equal(null, err);
-
-        console.log("Connected successfully to server");
-
-        const db = client.db(dbName);
-        /*
-        * CRUD Operations */
-        client.close();
-    });
-
+    client.close();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    client.close();
+  }
 }
-
-

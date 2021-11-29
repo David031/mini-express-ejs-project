@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { login } from "./api/connect";
 const app = express();
 const port = 4000;
 
@@ -37,6 +38,7 @@ app.get("/login", function (req, res) {
 
 app.post("/login", function (req, res) {
   const { username, password } = req.body;
+  login(username, password);
   res.render("pages/inventory/index", { username: username });
 });
 
