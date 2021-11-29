@@ -33,18 +33,15 @@ app.get("/about", function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-  res.render("pages/login");
+  res.render("pages/login",{isInValid: false});
 });
 
 app.post("/login", async function (req, res) {
   const { username, password } = req.body;
-  const response = await login(username, password);
-  console.log('res', response)
-  if (response) {
-
+  if (await login(username, password)) {
     res.render("pages/inventory/index", { username: username });
-  } else {
-    res.redirect('/login')
+  }else{
+    res.render("pages/login",{isInValid: true});
   }
 });
 

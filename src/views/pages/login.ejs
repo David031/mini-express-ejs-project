@@ -31,7 +31,10 @@
               placeholder="Password"
             />
           </div>
-          <button type="submit" class="btn btn-primary">Login</button>
+          <input type="submit" class="btn btn-primary <%= isInValid? 'is-invalid':'' %> "  id='login-btn' title="Login"/>
+          <label class="invalid-feedback" for="login-btn">
+            Username or Password is not correct !
+          </label>
         </form>
       </div>
     </main>
