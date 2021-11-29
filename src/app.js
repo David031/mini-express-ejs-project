@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { login } from "./api/connect";
+import { login } from "./api/login.js";
 const app = express();
 const port = 4000;
 
@@ -36,10 +36,16 @@ app.get("/login", function (req, res) {
   res.render("pages/login");
 });
 
-app.post("/login", function (req, res) {
+app.post("/login", async function (req, res) {
   const { username, password } = req.body;
-  login(username, password);
-  res.render("pages/inventory/index", { username: username });
+  const response = await login(username, password);
+  console.log('res', response)
+  if (response) {
+
+    res.render("pages/inventory/index", { username: username });
+  } else {
+    res.redirect('/login')
+  }
 });
 
 app.listen(port, () => {
