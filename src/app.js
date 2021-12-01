@@ -1,8 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { login } from "./api/login.js";
-import session from "express-session";
 import { list } from "./api/list.js";
+import { login } from "./api/login.js";
+import { edit } from "./api/edit.js";
+import session from "express-session";
 const app = express();
 const port = 4000;
 const sessionKey = "skey";
@@ -41,6 +42,34 @@ app.get("/", function (req, res) {
     tagline: tagline,
   });
 });
+
+app.get("/test", function (req, res) {
+  const data = {
+    _id: "61a20e3f15c6335af430f12a",
+    name: "david",
+    type: "user",
+    quantity: "",
+    photo: "aba",
+    photo_mimetype: "jpg",
+    address: {
+      street: "aberdeen",
+      building: "bububu",
+      country: "Hong Kong",
+      zipcode: "ac",
+      coord: ""
+    },
+    manager: "jimmy"
+
+  }
+  edit(data);
+});
+
+app.get("/test2", function (req, res) {
+
+  list();
+  res.write("abc")
+});
+
 
 app.get("/about", function (req, res) {
   res.render("pages/about");

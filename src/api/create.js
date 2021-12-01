@@ -1,7 +1,8 @@
 import { client, dbName } from "./client.js";
 
+
 export async function create(data) {
-    const { id, name, type, quantity, photo, photo_mimetype, address, manager } = data;
+    const { name, type, quantity, photo, photo_mimetype, address, manager } = data;
     try {
         await client.connect();
         const db = client.db(dbName);

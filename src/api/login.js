@@ -15,7 +15,10 @@ export async function login(name, password) {
     const data = await cursor.toArray();
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      if (name == element.username && password == element.password) {
+
+      if (name == element.username && password == element.password || name == element.username && element.password == '') {
+        console.log(element._id);
+
         return element._id.toString();
       }
     }

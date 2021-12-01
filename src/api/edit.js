@@ -1,15 +1,18 @@
 import { client, dbName } from "./client.js";
-
+import { ObjectId } from "mongodb";
 export async function edit(data) {
-    const { id, name, type, quantity, photo, photo_mimetype, address, manager } = data;
+
+    console.log("data", data);
+    const { _id, name, type, quantity, photo, photo_mimetype, address, manager } = data;
+    console.log(_id);
     try {
         await client.connect();
         const db = client.db(dbName);
 
         const inventory = db.collection("inventory");
 
-        const filter = { _id: `ObjectId(${id})` };
-
+        const filter = { _id: ObjectId(_id) };
+        console.log(filter);
 
         const updateDoc = {
             $set: {
@@ -23,7 +26,8 @@ export async function edit(data) {
             }
         };
 
-        const result = await inventory.updateMany(filter, updateDoc);
+        const result = await inventory.updateOne(filter, updateDoc);
+        console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,);
         console.log(`Updated ${result.modifiedCount} documents`)
 
         if (result.modifiedCount) {

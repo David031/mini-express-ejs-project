@@ -7,18 +7,24 @@ const mongourl = 'mongodb+srv://jimmy:xzC659428@cluster0.hnqlx.mongodb.net/minip
 const dbName = 'miniproject';
 const client = new MongoClient(mongourl);
 
+
 const DOC = [
     {
-        "Username": "david",
+        "username": "david",
         "password": "abc"
     },
     {
-        "Username": "jimmy",
+        "username": "jimmy",
         "password": "abc"
+    },
+    {
+        "username": "demo",
+        "password": ""
     }
 ];
 
 const insertDocument = (db, doc, callback) => {
+    // db.users.remove();
     db.collection('users').
         insertMany(doc, (err, results) => {
             assert.equal(err, null);
