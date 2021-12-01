@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { login } from "./api/login.js";
 import session from "express-session";
+import { list } from "./api/list.js";
 const app = express();
 const port = 4000;
 const sessionKey = "skey";
@@ -79,7 +80,11 @@ app.get("/inventory/index", async function (req, res) {
   if (!session.isAuth) {
     res.redirect("/login");
   } else {
-    res.render("pages/inventory/index", { username: session.username });
+    const data = await list();
+    res.render("pages/inventory/index", {
+      username: session.username,
+      data: data,
+    });
   }
 });
 

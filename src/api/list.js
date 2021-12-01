@@ -14,10 +14,7 @@ export async function list() {
     }
     const data = await cursor.toArray();
     console.log("data", data);
-
-
     return data;
-
   } catch (error) {
     console.error(error);
   } finally {

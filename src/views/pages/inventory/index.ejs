@@ -10,10 +10,67 @@
       <div class="jumbotron">
         <h1>Inventory</h1>
         <p>Welcome <%= username%></p>
-        <form >
-          <button type="submit" class="btn btn-primary"  id='create-btn' formaction="http://localhost:4000/inventory/create" formmethod="get">Create</button>
-          <button type="submit" class="btn btn-danger"  id='logout-btn' formaction="http://localhost:4000/logout" formmethod="get">Logout</button>
+        <form>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="create-btn"
+            formaction="http://localhost:4000/inventory/create"
+            formmethod="get"
+          >
+            Create Inventory
+          </button>
+          <button
+            type="submit"
+            class="btn btn-danger"
+            id="logout-btn"
+            formaction="http://localhost:4000/logout"
+            formmethod="get"
+          >
+            Logout
+          </button>
         </form>
+        <br />
+        <form>
+          <label for="search-input" class="form-label">Search</label>
+          <input
+            type="text"
+            class="form-control"
+            id="search-input"
+            placeholder="Search by inventory name ..."
+          />
+        </form>
+        <br />
+        <label for="search-result" class="form-label">Result</label>
+        <table class="table table-striped" id="search-result">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td colspan="2">Larry the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </main>
 
