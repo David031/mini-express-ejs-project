@@ -13,16 +13,14 @@ export async function login(name, password) {
       console.log("No documents found!");
     }
     const data = await cursor.toArray();
-    console.log("data", data);
-
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       if (name == element.username && password == element.password) {
-        return true;
+        return element._id.toString();
       }
     }
 
-    return false;
+    return null;
   } catch (error) {
     console.error(error);
   } finally {
