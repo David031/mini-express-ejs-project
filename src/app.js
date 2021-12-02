@@ -108,6 +108,25 @@ app.get("/inventory/index", async function (req, res) {
   }
 });
 
+app.get("/inventory/search", async function (req, res) {
+  const { session } = req;
+  if (!session.isAuth) {
+    res.redirect("/login");
+  } else {
+    const query = req.query.search;
+    if (query != "" && query != null) {
+      const data = await list();
+      const filtered = data.filter((item) => item.name.includes(query));
+      res.render("pages/inventory/index", {
+        username: session.username,
+        data: filtered,
+      });
+    } else {
+      res.redirect("/inventory/index");
+    }
+  }
+});
+
 app.get("/inventory/info", async function (req, res) {
   const { session } = req;
   if (!session.isAuth) {
@@ -116,12 +135,14 @@ app.get("/inventory/info", async function (req, res) {
     const id = req.query.id;
     const isInValid = req.query.isInValid;
     const data = await info(id);
+    const format_data = factoryToData(data);
     res.render("pages/inventory/inventory_info", {
       username: session.username,
-      data,
+      data: format_data,
       capitalizeFirstLetter,
       id,
       isInValid: isInValid ?? false,
+      isInValidCoord: !(!!format_data.latitude && !!format_data.longitude),
     });
   }
 });

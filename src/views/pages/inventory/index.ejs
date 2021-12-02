@@ -42,14 +42,40 @@
           </div>
         </div>
         <br />
+        <h6>There are <%= data.length %> inventory found.</h6>
+        <br />
         <form>
-          <label for="search-input" class="form-label">Search</label>
-          <input
-            type="text"
-            class="form-control"
-            id="search-input"
-            placeholder="Search by inventory name ..."
-          />
+          <div class="row g-10 align-items-center">
+            <div class="col-auto">
+              <label for="search-input" class="col-form-label">Search</label>
+            </div>
+            <div class="col-auto">
+              <input
+                type="text"
+                id="search-input"
+                class="form-control"
+                name="search"
+                placeholder="Inventory Name"
+              />
+            </div>
+            <div class="col-1">
+              <input
+                type="submit"
+                class="btn btn-primary"
+                formaction="http://localhost:4000/inventory/search"
+                formmethod="get"
+              />
+            </div>
+            <div class="col-1">
+              <input
+                type="submit"
+                class="btn btn-info"
+                formaction="http://localhost:4000/inventory/index"
+                formmethod="get"
+                value="Reset"
+              />
+            </div>
+          </div>
         </form>
         <br />
         <label for="search-result" class="form-label">Result</label>

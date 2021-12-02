@@ -2,10 +2,20 @@
 <html lang="en">
   <head>
     <%- include('../../partials/head'); %>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
   </head>
   <body class="container">
     <header><%- include('../../partials/header'); %></header>
-
     <main>
       <div class="jumbotron">
         <h1>Inventory</h1>
@@ -52,18 +62,41 @@
             Inventory delete failed! Please retry later ...
           </label>
         </form>
-        <div class="d-flex flex-wrap justify-content-evenly mt-3">
+
+        <div class="d-flex flex-wrap justify-content-evenly mt-2">
           <% Object.entries(data).forEach(([key,value],idx) => { %>
           <div class="col-sm-6 margin-top-xs mt-3">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title"><%= capitalizeFirstLetter(key) %></h5>
-                <p class="card-text"><%= value?value:'N/A' %></p>
+                <p class="card-text"><%= !!value?value:'N/A' %></p>
               </div>
             </div>
           </div>
           <% }) %>
         </div>
+        <div class="card mt-3" id="map-card">
+          <div class="card-body">
+            <div id="map" style="height: 300px"></div>
+            <script>
+              var map = L.map('map').setView([<%=data.latitude%>,<%=data.longitude%>], 13);
+              L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoiZGF2aWQwMzEiLCJhIjoiY2t3cDU4NnUwMDlnYTJ3anYwZmRlbWx0biJ9.-sW8YzTF7jqvOlehLyOzxw'
+              }).addTo(map);
+              var marker = L.marker([<%=data.latitude%>,<%=data.longitude%>]).addTo(map);
+            </script>
+          </div>
+        </div>
+        <script>
+          if ("<%= isInValidCoord%>" == "true") {
+            document.getElementById("map-card").hidden = true;
+          }
+        </script>
       </div>
     </main>
 

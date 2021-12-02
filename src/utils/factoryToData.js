@@ -10,8 +10,8 @@ export default function factoryToData(doc) {
     building: address.building,
     country: address.country,
     zipcode: address.zipcode,
+    manager,
     latitude: parseFloat(address.coord.split(",")[0]),
     longitude: parseFloat(address.coord.split(",")[1]),
-    manager,
   };
 }

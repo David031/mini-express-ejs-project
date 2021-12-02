@@ -9,7 +9,7 @@
     <main>
       <div class="jumbotron">
         <h1>Login</h1>
-        <br/>
+        <br />
         <form action="http://localhost:4000/login" method="post">
           <div class="form-group">
             <label for="username">Username</label>
@@ -21,7 +21,7 @@
               placeholder="Username"
             />
           </div>
-          <div class="form-group" >
+          <div class="form-group">
             <label for="passowrd">Password</label>
             <input
               name="password"
@@ -31,7 +31,12 @@
               placeholder="Password"
             />
           </div>
-          <input type="submit" class="btn btn-primary <%= isInValid? 'is-invalid':'' %> "  id='login-btn' title="Login"/>
+          <input
+            type="submit"
+            class="btn btn-primary <%= isInValid? 'is-invalid':'' %>"
+            id="login-btn"
+            value="Login"
+          />
           <label class="invalid-feedback" for="login-btn">
             Username or Password is not correct !
           </label>
