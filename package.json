@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "npm": ">=6.0.0",
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "ejs": "^3.1.6",
@@ -24,4 +28,5 @@
   "nodemonConfig": {
     "ext": "js,ejs"
   }
+  
 }

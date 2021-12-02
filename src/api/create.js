@@ -1,39 +1,24 @@
+import factoryToDoc from "../utils/factoryToDoc.js";
 import { client, dbName } from "./client.js";
 
+export async function create(data, manager) {
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const inventory = db.collection("inventory");
 
-export async function create(data) {
-    const { name, type, quantity, photo, photo_mimetype, address, manager } = data;
-    try {
-        await client.connect();
-        const db = client.db(dbName);
-        updata = data.toArray();
-        const inventory = db.collection("inventory");
-
-
-
-
-        const Doc = [{
-
-            name: name,
-            type: type,
-            quantity: quantity,
-            photo: photo,
-            photo_mimetype: photo_mimetype,
-            address: address,
-            manager: manager
-        }];
-        const options = { ordered: true };
-        const result = await inventory.insertMany(docs, options);
-        console.log(`${result.insertedCount} documents were inserted`);
-
-        if (result.insertedCount) {
-            return true;
-        } else { return false; }
-
-
-    } catch (error) {
-        console.error(error);
-    } finally {
-        client.close();
+    const result = await inventory.insertOne(factoryToDoc(data, manager));
+    console.log(
+      `[Inventory Create]: ${result.insertedCount} documents were inserted`
+    );
+    if (result.insertedCount == 1) {
+      return true;
+    } else {
+      return false;
     }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    client.close();
+  }
 }

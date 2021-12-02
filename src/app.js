@@ -1,9 +1,15 @@
-import express from "express";
 import bodyParser from "body-parser";
+import express from "express";
+import session from "express-session";
+import { create } from "./api/create.js";
+import { edit } from "./api/edit.js";
+import { info } from "./api/info.js";
 import { list } from "./api/list.js";
 import { login } from "./api/login.js";
-import { edit } from "./api/edit.js";
-import session from "express-session";
+import { remove } from "./api/remove.js";
+import capitalizeFirstLetter from "./utils/capitalizeFirstLetter.js";
+import factoryToData from "./utils/factoryToData.js";
+
 const app = express();
 const port = 4000;
 const sessionKey = "skey";
@@ -29,18 +35,7 @@ app.use(
 );
 
 app.get("/", function (req, res) {
-  var mascots = [
-    { name: "Sammy", organization: "DigitalOcean", birth_year: 2012 },
-    { name: "Tux", organization: "Linux", birth_year: 1996 },
-    { name: "Moby Dock", organization: "Docker", birth_year: 2013 },
-  ];
-  var tagline =
-    "No programming concept is complete without a cute animal mascot.";
-
-  res.render("pages/main", {
-    mascots: mascots,
-    tagline: tagline,
-  });
+  res.render("pages/main");
 });
 
 app.get("/test", function (req, res) {
@@ -56,20 +51,17 @@ app.get("/test", function (req, res) {
       building: "bububu",
       country: "Hong Kong",
       zipcode: "ac",
-      coord: ""
+      coord: "",
     },
-    manager: "jimmy"
-
-  }
+    manager: "jimmy",
+  };
   edit(data);
 });
 
 app.get("/test2", function (req, res) {
-
   list();
-  res.write("abc")
+  res.write("abc");
 });
-
 
 app.get("/about", function (req, res) {
   res.render("pages/about");
@@ -88,7 +80,6 @@ app.post("/login", async function (req, res) {
   const { session } = req;
   const { username, password } = req.body;
   const userId = await login(username, password);
-  console.log("userId", userId);
   if (userId) {
     session.regenerate((err) => {
       if (err) {
@@ -117,14 +108,21 @@ app.get("/inventory/index", async function (req, res) {
   }
 });
 
-app.post("/inventory/create", async function (req, res) {
-  const data = req.body;
+app.get("/inventory/info", async function (req, res) {
   const { session } = req;
   if (!session.isAuth) {
     res.redirect("/login");
   } else {
-    console.log("data", data);
-    res.render("pages/inventory/index", { username: session.username });
+    const id = req.query.id;
+    const isInValid = req.query.isInValid;
+    const data = await info(id);
+    res.render("pages/inventory/inventory_info", {
+      username: session.username,
+      data,
+      capitalizeFirstLetter,
+      id,
+      isInValid: isInValid ?? false,
+    });
   }
 });
 
@@ -134,8 +132,72 @@ app.get("/inventory/create", async function (req, res) {
     res.redirect("/login");
   } else {
     res.render("pages/inventory/inventory_create", {
-      username: session.username,
+      isInValid: false,
     });
+  }
+});
+
+app.post("/inventory/create", async function (req, res) {
+  const data = req.body;
+  const { session } = req;
+  if (!session.isAuth) {
+    res.redirect("/login");
+  } else {
+    const response = await create(data, session.username);
+    if (response) {
+      res.render("pages/inventory/inventory_create", {
+        isInValid: true,
+      });
+    } else {
+      res.redirect("/inventory/index");
+    }
+  }
+});
+app.get("/inventory/edit", async function (req, res) {
+  const { session } = req;
+  if (!session.isAuth) {
+    res.redirect("/login");
+  } else {
+    const id = req.query.id;
+    const isInValid = req.query.isInValid;
+    const data = await info(id);
+    res.render("pages/inventory/inventory_edit", {
+      isInValid: isInValid ?? false,
+      data: factoryToData(data),
+      id,
+    });
+  }
+});
+
+app.post("/inventory/edit", async function (req, res) {
+  const data = req.body;
+  const { session } = req;
+  if (!session.isAuth) {
+    res.redirect("/login");
+  } else {
+    const id = data.id;
+    const response = await edit(id, data, session.username);
+    if (response) {
+      res.redirect(`/inventory/info?id=${id}`);
+    } else {
+      res.redirect(`/inventory/info?id=${id}&isInValid=true`);
+    }
+  }
+});
+
+app.post("/inventory/delete", async function (req, res) {
+  const data = req.body;
+  const { session } = req;
+  if (!session.isAuth) {
+    res.redirect("/login");
+  } else {
+    const id = data.id;
+    const response = await remove(id);
+    if (response) {
+      res.redirect(`/inventory/index`);
+    } else {
+      res.redirect(`/inventory/info?id=${id}&isInValid=true`);
+    }
   }
 });
 
@@ -148,6 +210,10 @@ app.get("/logout", function (req, res) {
     res.clearCookie(sessionKey);
     res.redirect("/");
   });
+});
+
+app.get("*", function (req, res) {
+  res.send("404 Error -- Page not found !", 404);
 });
 
 app.listen(port, () => {

@@ -12,8 +12,8 @@ export async function list() {
     if ((await cursor.count()) === 0) {
       console.log("No documents found!");
     }
-    const data = await cursor.toArray();
-    console.log("data", data);
+    const response = await cursor.toArray();
+    const data = response.map((ele) => ({ id: ele._id.toString(), ...ele }));
     return data;
   } catch (error) {
     console.error(error);

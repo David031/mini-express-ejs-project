@@ -9,18 +9,134 @@
     <main>
       <div class="jumbotron">
         <h1>Create Inventory</h1>
-        <form >
-            <div class="form-group" >
-                <label for="name">Inventory Name</label>
-                <input
-                  name="name"
-                  class="form-control"
-                  id="name"
-                  type="text"
-                  placeholder="Inventory Name"
-                />
-              </div>
-          <button type="submit" class="btn btn-primary"  id='create-btn' formaction="http://localhost:4000/inventory/create" formmethod="post">Create</button>
+        <form>
+          <div class="form-group">
+            <label for="name">Inventory Name</label>
+            <input
+              name="name"
+              class="form-control"
+              id="name"
+              type="text"
+              placeholder="Inventory Name"
+              required
+            />
+            <div class="invalid-feedback">Please input a inventory name !</div>
+          </div>
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input
+              name="type"
+              class="form-control"
+              id="type"
+              type="text"
+              placeholder="Type"
+            />
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input
+              name="quantity"
+              class="form-control"
+              id="quantity"
+              type="text"
+              placeholder="Quantity"
+            />
+          </div>
+          <div class="form-group">
+            <label for="photo">Photo</label>
+            <input
+              name="photo"
+              class="form-control"
+              id="photo"
+              type="text"
+              placeholder="Photo"
+            />
+          </div>
+          <div class="form-group">
+            <label for="photo_mimetype">Photo_mimetype</label>
+            <input
+              name="photo_mimetype"
+              class="form-control"
+              id="photo_mimetype"
+              type="text"
+              placeholder="Photo_mimetype"
+            />
+          </div>
+          <div class="form-group row g-3">
+            <div class="form-group col-12">
+              <label for="street" class="form-label">Street</label>
+              <input
+                name="street"
+                type="text"
+                class="form-control"
+                id="street"
+                placeholder="Street"
+              />
+            </div>
+            <br />
+            <div class="form-group col-12">
+              <label for="building" class="form-label">Building</label>
+              <input
+                name="building"
+                type="text"
+                class="form-control"
+                id="building"
+                placeholder="Building"
+              />
+            </div>
+            <br />
+            <div class="form-group col-md-6">
+              <label for="country" class="form-label">Country</label>
+              <input
+                name="country"
+                type="text"
+                class="form-control"
+                id="country"
+                placeholder="Country"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="latitude" class="form-label">Latitude</label>
+              <input
+                name="latitude"
+                type="number"
+                class="form-control"
+                id="latitude"
+                step="0.000001"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="longitude" class="form-label">Longitude</label>
+              <input
+                name="longitude"
+                type="number"
+                class="form-control"
+                id="longitude"
+                step="0.000001"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="zipcode" class="form-label">Zip</label>
+              <input
+                type="text"
+                class="form-control"
+                id="zipcode"
+                name="zipcode"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary <%= isInValid? 'is-invalid':'' %>"
+            id="create-btn"
+            formaction="http://localhost:4000/inventory/create"
+            formmethod="post"
+          >
+            Create
+          </button>
+          <label class="invalid-feedback" for="login-btn">
+            Create inventory failed! Please retry later ...
+          </label>
         </form>
       </div>
     </main>

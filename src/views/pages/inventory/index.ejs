@@ -8,28 +8,39 @@
 
     <main>
       <div class="jumbotron">
-        <h1>Inventory</h1>
-        <p>Welcome <%= username%></p>
-        <form>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            id="create-btn"
-            formaction="http://localhost:4000/inventory/create"
-            formmethod="get"
-          >
-            Create Inventory
-          </button>
-          <button
-            type="submit"
-            class="btn btn-danger"
-            id="logout-btn"
-            formaction="http://localhost:4000/logout"
-            formmethod="get"
-          >
-            Logout
-          </button>
-        </form>
+        <div class="row">
+          <div class="col xs-9 sm-6">
+            <h1>Inventory</h1>
+            <p>Welcome <%= username%></p>
+            <form>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="create-btn"
+                formaction="http://localhost:4000/inventory/create"
+                formmethod="get"
+              >
+                Create Inventory
+              </button>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                id="logout-btn"
+                formaction="http://localhost:4000/logout"
+                formmethod="get"
+              >
+                Logout
+              </button>
+            </form>
+          </div>
+          <div class="col xs-3 sm-3">
+            <div class="p-3">
+              <h6>Developer:</h6>
+              <div>David - s12842728</div>
+              <div>Jimmy - s12842728</div>
+            </div>
+          </div>
+        </div>
         <br />
         <form>
           <label for="search-input" class="form-label">Search</label>
@@ -46,29 +57,30 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Item Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Manager</th>
+              <th scope="col">Operation</th>
             </tr>
           </thead>
           <tbody>
+            <% data.forEach((element,i) => { %>
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
+              <th scope="row"><%= i %></th>
+              <td><%= element.name %></td>
+              <td><%= element.type %></td>
+              <td><%= element.manager %></td>
+              <td>
+                <a
+                  href="http://localhost:4000/inventory/info?id=<%= element.id %>"
+                  class="btn btn-outline-primary"
+                  role="button"
+                  id="inventory-details-btn-<%= element.id %> "
+                  >Details</a
+                >
+              </td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colspan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
+            <% }) %>
           </tbody>
         </table>
       </div>
