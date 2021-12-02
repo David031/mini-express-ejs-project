@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import session from "express-session";
+import multer from "multer";
 import { create } from "./api/create.js";
 import { edit } from "./api/edit.js";
 import { info } from "./api/info.js";
@@ -13,9 +14,12 @@ import factoryToData from "./utils/factoryToData.js";
 const app = express();
 const port = 4000;
 const sessionKey = "skey";
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
+app.use(express.static("./public"));
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -158,22 +162,29 @@ app.get("/inventory/create", async function (req, res) {
   }
 });
 
-app.post("/inventory/create", async function (req, res) {
-  const data = req.body;
-  const { session } = req;
-  if (!session.isAuth) {
-    res.redirect("/login");
-  } else {
-    const response = await create(data, session.username);
-    if (response) {
-      res.render("pages/inventory/inventory_create", {
-        isInValid: true,
-      });
+app.post(
+  "/inventory/create",
+  upload.single("photo"),
+  async function (req, res) {
+    const data = req.body;
+    const { session } = req;
+    if (!session.isAuth) {
+      res.redirect("/login");
     } else {
-      res.redirect("/inventory/index");
+      const encoded = req.file.buffer.toString("base64");
+      data.photo = encoded;
+      const response = await create(data, session.username);
+      console.log("response", response);
+      if (response) {
+        res.redirect("/inventory/index");
+      } else {
+        res.render("pages/inventory/inventory_create", {
+          isInValid: true,
+        });
+      }
     }
   }
-});
+);
 app.get("/inventory/edit", async function (req, res) {
   const { session } = req;
   if (!session.isAuth) {

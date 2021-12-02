@@ -64,7 +64,8 @@
         </form>
 
         <div class="d-flex flex-wrap justify-content-evenly mt-2">
-          <% Object.entries(data).forEach(([key,value],idx) => { %>
+          <% Object.entries(data).forEach(([key,value],idx) => { %> <% if (!(key
+          == 'photo') && !(key == 'photo_mimetype')){ %>
           <div class="col-sm-6 margin-top-xs mt-3">
             <div class="card">
               <div class="card-body">
@@ -73,7 +74,20 @@
               </div>
             </div>
           </div>
-          <% }) %>
+          <% } else if (key == 'photo') {%>
+          <div class="col-sm-12 margin-top-xs mt-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Photo</h5>
+                <img
+                  style="max-height: 200px; width: auto; object-fit: contain"
+                  class="card-img"
+                  src="data:image/<%= data.photo_mimetype %>;base64, <%= data.photo %>"
+                />
+              </div>
+            </div>
+          </div>
+          <% } %> <% }) %>
         </div>
         <div class="card mt-3" id="map-card">
           <div class="card-body">

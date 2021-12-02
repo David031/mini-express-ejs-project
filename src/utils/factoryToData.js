@@ -3,9 +3,9 @@ export default function factoryToData(doc) {
   return {
     name,
     type,
-    quantity,
     photo,
     photo_mimetype,
+    quantity,
     street: address.street,
     building: address.building,
     country: address.country,
