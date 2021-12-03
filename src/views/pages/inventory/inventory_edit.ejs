@@ -9,7 +9,14 @@
     <main>
       <div class="jumbotron">
         <h1>Edit Inventory</h1>
-        <form>
+        <form
+          id="edit-form"
+          method="post"
+          enctype="multipart/form-data"
+          action="http://localhost:4000/inventory/edit"
+          class="needs-validation"
+          novalidate
+        >
           <div class="form-group">
             <label for="name">Inventory Name</label>
             <input
@@ -19,7 +26,11 @@
               type="text"
               placeholder="Inventory Name"
               value="<%= data.name %>"
+              required
             />
+            <div class="invalid-feedback">
+              Please provide a valid inventory name.
+            </div>
           </div>
           <div class="form-group">
             <label for="type">Type</label>
@@ -44,26 +55,58 @@
             />
           </div>
           <div class="form-group">
-            <label for="photo">Photo</label>
-            <input
-              name="photo"
-              class="form-control"
-              id="photo"
-              type="text"
-              placeholder="Photo"
-              value="<%= data.photo %>"
-            />
-          </div>
-          <div class="form-group">
-            <label for="photo_mimetype">Photo_mimetype</label>
-            <input
-              name="photo_mimetype"
-              class="form-control"
-              id="photo_mimetype"
-              type="text"
-              placeholder="Photo_mimetype"
-              value="<%= data.photo_mimetype %>"
-            />
+            <label for="photo-container">Photo</label>
+            <div class="card">
+              <div class="card-body">
+                <p class="card-text">Current Photo</p>
+                <% if (!data.photo) {%>
+                <p class="card-text">N/A</p>
+                <%} else { %>
+                <img
+                  style="max-height: 200px; width: auto; object-fit: contain"
+                  class="card-img"
+                  src="data:image/<%= data.photo_mimetype %>;base64, <%= data.photo %>"
+                />
+                <% }%>
+                <div id="photo-container " class="input-group mt-2">
+                  <label
+                    for="photo"
+                    class="input-group-text"
+                    style="background-color: white"
+                    >Upload</label
+                  >
+                  <span id="file-chosen" class="p-2">No file chosen</span>
+                  <input
+                    class="form-control"
+                    name="photo"
+                    type="file"
+                    id="photo"
+                    accept=".jpg,.png"
+                    hidden
+                  />
+                  <div class="form-group" hidden>
+                    <label for="photo_mimetype">Photo_mimetype</label>
+                    <input
+                      name="photo_mimetype"
+                      class="form-control"
+                      id="photo_mimetype"
+                      type="text"
+                      placeholder="Photo_mimetype"
+                    />
+                  </div>
+                  <script>
+                    const inputBtn = document.getElementById("photo");
+                    const fileChosen = document.getElementById("file-chosen");
+                    const mimetype = document.getElementById("photo_mimetype");
+                    inputBtn.addEventListener("change", function () {
+                      const file = this.files[0];
+                      fileChosen.textContent = file.name;
+                      mimetype.value = file.name.split(".")[1];
+                    });
+                  </script>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group row g-3">
             <div class="form-group col-12">
@@ -138,8 +181,6 @@
             type="submit"
             class="btn btn-primary <%= isInValid? 'is-invalid':'' %>"
             id="update-btn"
-            formaction="http://localhost:4000/inventory/edit"
-            formmethod="post"
             value="<%= id %>"
             name="id"
           >
@@ -149,6 +190,34 @@
             Update inventory failed! Please retry later ...
           </label>
         </form>
+        <script>
+          (function () {
+            "use strict";
+            window.addEventListener(
+              "load",
+              function () {
+                var forms = document.getElementsByClassName("needs-validation");
+                var validation = Array.prototype.filter.call(
+                  forms,
+                  function (form) {
+                    form.addEventListener(
+                      "submit",
+                      function (event) {
+                        if (form.checkValidity() === false) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }
+                        form.classList.add("was-validated");
+                      },
+                      false
+                    );
+                  }
+                );
+              },
+              false
+            );
+          })();
+        </script>
       </div>
     </main>
 

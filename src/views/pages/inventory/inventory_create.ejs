@@ -15,6 +15,8 @@
           method="post"
           enctype="multipart/form-data"
           action="http://localhost:4000/inventory/create"
+          class="needs-validation"
+          novalidate
         >
           <div class="form-group">
             <label for="name">Inventory Name</label>
@@ -26,7 +28,9 @@
               placeholder="Inventory Name"
               required
             />
-            <div class="invalid-feedback">Please input a inventory name !</div>
+            <div class="invalid-feedback">
+              Please provide a valid inventory name.
+            </div>
           </div>
           <div class="form-group">
             <label for="type">Type</label>
@@ -82,7 +86,6 @@
               const mimetype = document.getElementById("photo_mimetype");
               inputBtn.addEventListener("change", function () {
                 const file = this.files[0];
-                console.log("file", file);
                 fileChosen.textContent = file.name;
                 mimetype.value = file.name.split(".")[1];
               });
@@ -163,6 +166,34 @@
             Create inventory failed! Please retry later ...
           </label>
         </form>
+        <script>
+          (function () {
+            "use strict";
+            window.addEventListener(
+              "load",
+              function () {
+                var forms = document.getElementsByClassName("needs-validation");
+                var validation = Array.prototype.filter.call(
+                  forms,
+                  function (form) {
+                    form.addEventListener(
+                      "submit",
+                      function (event) {
+                        if (form.checkValidity() === false) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }
+                        form.classList.add("was-validated");
+                      },
+                      false
+                    );
+                  }
+                );
+              },
+              false
+            );
+          })();
+        </script>
       </div>
     </main>
 

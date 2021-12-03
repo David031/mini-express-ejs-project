@@ -79,11 +79,15 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Photo</h5>
+                <% if (!value) {%>
+                <p class="card-text">N/A</p>
+                <%} else { %>
                 <img
                   style="max-height: 200px; width: auto; object-fit: contain"
                   class="card-img"
                   src="data:image/<%= data.photo_mimetype %>;base64, <%= data.photo %>"
                 />
+                <% }%>
               </div>
             </div>
           </div>

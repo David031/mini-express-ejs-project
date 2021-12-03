@@ -12,6 +12,8 @@ export default function factoryToDoc(data, manager) {
     longitude,
     zipcode,
   } = data;
+  if (photo && photo_mimetype) {
+    
   return {
     name: name,
     type: type,
@@ -27,4 +29,20 @@ export default function factoryToDoc(data, manager) {
     },
     manager,
   };
+  
+  }else{
+    return {
+      name: name,
+      type: type,
+      quantity: quantity,
+      address: {
+        street,
+        building,
+        country,
+        zipcode,
+        coord: `${latitude},${longitude}`,
+      },
+      manager,
+    };
+  }
 }

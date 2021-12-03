@@ -10,6 +10,7 @@ export async function edit(id, data, manager) {
     const doc = {
       $set: factoryToDoc(data, manager),
     };
+    console.log('doc',doc)
     const result = await inventory.updateOne(filter, doc);
     console.log(
       `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
