@@ -56,14 +56,19 @@
           </div>
           <div class="form-group">
             <label for="photo-container">Photo</label>
-            <div class="card">
+            <div class="card" style="border-radius: 8px">
               <div class="card-body">
                 <p class="card-text">Current Photo</p>
                 <% if (!data.photo) {%>
                 <p class="card-text">N/A</p>
                 <%} else { %>
                 <img
-                  style="max-height: 200px; width: auto; object-fit: contain"
+                  style="
+                    max-height: 200px;
+                    width: auto;
+                    object-fit: contain;
+                    border-radius: 8px;
+                  "
                   class="card-img"
                   src="data:image/<%= data.photo_mimetype %>;base64, <%= data.photo %>"
                 />

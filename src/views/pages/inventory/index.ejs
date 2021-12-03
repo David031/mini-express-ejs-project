@@ -85,6 +85,7 @@
               <th scope="col">#</th>
               <th scope="col">Item Name</th>
               <th scope="col">Type</th>
+              <th scope="col">Photo</th>
               <th scope="col">Manager</th>
               <th scope="col">Operation</th>
             </tr>
@@ -95,6 +96,19 @@
               <th scope="row"><%= i %></th>
               <td><%= element.name %></td>
               <td><%= element.type %></td>
+              <td>
+                <% if (element.photo && element.photo_mimetype) { %>
+                <img
+                  style="
+                    max-height: 62px;
+                    width: auto;
+                    object-fit: contain;
+                    border-radius: 8px;
+                  "
+                  src="data:image/<%= element.photo_mimetype %>;base64, <%= element.photo %>"
+                />
+                <% } else { %> N/A <% } %>
+              </td>
               <td><%= element.manager %></td>
               <td>
                 <a

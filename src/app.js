@@ -120,7 +120,9 @@ app.get("/inventory/search", async function (req, res) {
     const query = req.query.search;
     if (query != "" && query != null) {
       const data = await list();
-      const filtered = data.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+      const filtered = data.filter((item) =>
+        item.name.toLowerCase().includes(query.toLowerCase())
+      );
       res.render("pages/inventory/index", {
         username: session.username,
         data: filtered,
@@ -174,7 +176,6 @@ app.post(
       const encoded = req.file?.buffer.toString("base64");
       data.photo = encoded;
       const response = await create(data, session.username);
-      console.log("response", response);
       if (response) {
         res.redirect("/inventory/index");
       } else {
@@ -201,7 +202,7 @@ app.get("/inventory/edit", async function (req, res) {
   }
 });
 
-app.post("/inventory/edit",   upload.single("photo"), async function (req, res) {
+app.post("/inventory/edit", upload.single("photo"), async function (req, res) {
   const data = req.body;
   const { session } = req;
   if (!session.isAuth) {
@@ -211,10 +212,9 @@ app.post("/inventory/edit",   upload.single("photo"), async function (req, res) 
     if (req.file) {
       const encoded = req.file.buffer.toString("base64");
       data.photo = encoded;
-    }else{
-      delete data.photo_mimetype
+    } else {
+      delete data.photo_mimetype;
     }
-    console.log(data)
     const response = await edit(id, data, session.username);
     if (response) {
       res.redirect(`/inventory/info?id=${id}`);
@@ -251,10 +251,30 @@ app.get("/logout", function (req, res) {
   });
 });
 
+app.get("/api/inventory/*", async function (req, res) {
+  const url = req.url.split("/");
+  const type = url[url.length - 2];
+  const value = url[url.length - 1];
+
+  if (type == "name" || type == "type") {
+    const items = await list();
+    const result = items.filter((item) =>
+      item[type].toLowerCase().includes(value.toLowerCase())
+    );
+    res.status(200).send({ status: 200, data: result });
+  } else {
+    res.status(404).send({
+      status: 400,
+      error:
+        "Error -- Missing or wrong parameter. Please check your parameter use 'name' or 'type' instead of others !",
+    });
+  }
+});
+
 app.get("*", function (req, res) {
   res.status(404).send("404 Error -- Page not found !");
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Server listening at http://localhost:${port}`);
 });

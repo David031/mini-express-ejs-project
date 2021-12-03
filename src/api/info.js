@@ -1,4 +1,4 @@
-import { ObjectId } from "bson";
+import { ObjectId } from "mongodb";
 import { client, dbName } from "./client.js";
 
 export async function info(id) {

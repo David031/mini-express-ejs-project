@@ -13,24 +13,22 @@ export default function factoryToDoc(data, manager) {
     zipcode,
   } = data;
   if (photo && photo_mimetype) {
-    
-  return {
-    name: name,
-    type: type,
-    quantity: quantity,
-    photo: photo,
-    photo_mimetype: photo_mimetype,
-    address: {
-      street,
-      building,
-      country,
-      zipcode,
-      coord: `${latitude},${longitude}`,
-    },
-    manager,
-  };
-  
-  }else{
+    return {
+      name: name,
+      type: type,
+      quantity: quantity,
+      photo: photo,
+      photo_mimetype: photo_mimetype,
+      address: {
+        street,
+        building,
+        country,
+        zipcode,
+        coord: `${latitude},${longitude}`,
+      },
+      manager,
+    };
+  } else {
     return {
       name: name,
       type: type,
