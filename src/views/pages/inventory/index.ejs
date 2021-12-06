@@ -1,114 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <%- include('../../partials/head'); %>
+  </head>
 
-<head>
-  <%- include('../../partials/head'); %>
-</head>
+  <body class="container">
+    <header><%- include('../../partials/header'); %></header>
 
-<body class="container">
-  <header>
-    <%- include('../../partials/header'); %>
-  </header>
-
-  <main>
-    <div class="jumbotron">
-      <div class="row">
-        <div class="col xs-9 sm-6">
-          <h1>Inventory</h1>
-          <p>Welcome <%= username%>
-          </p>
-          <form>
-            <button type="submit" class="btn btn-primary" id="create-btn"
-              formaction="http://localhost:4000/inventory/create" formmethod="get">
-              Create Inventory
-            </button>
-            <button type="submit" class="btn btn-danger" id="logout-btn" formaction="http://localhost:4000/logout"
-              formmethod="get">
-              Logout
-            </button>
-          </form>
-        </div>
-        <div class="col xs-3 sm-3">
-          <div class="p-3">
-            <h6>Developer:</h6>
-            <div>David - s12842728</div>
-            <div>Jimmy - s12795968</div>
+    <main>
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col xs-9 sm-6">
+            <h1>Inventory</h1>
+            <p>Welcome <%= username%></p>
+            <form>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="create-btn"
+                formaction="/inventory/create"
+                formmethod="get"
+              >
+                Create Inventory
+              </button>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                id="logout-btn"
+                formaction="/logout"
+                formmethod="get"
+              >
+                Logout
+              </button>
+            </form>
           </div>
-        </div>
-      </div>
-      <br />
-      <h6>There are <%= data.length %> inventory found.</h6>
-      <br />
-      <form>
-        <div class="row g-10 align-items-center">
-          <div class="col-auto">
-            <label for="search-input" class="col-form-label">Search</label>
-          </div>
-          <div class="col-auto">
-            <input type="text" id="search-input" class="form-control" name="search" placeholder="Inventory Name" />
-          </div>
-          <div class="col-1">
-            <input type="submit" class="btn btn-primary" formaction="http://localhost:4000/inventory/search"
-              formmethod="get" />
-          </div>
-          <div class="col-1">
-            <input type="submit" class="btn btn-info" formaction="http://localhost:4000/inventory/index"
-              formmethod="get" value="Reset" />
+          <div class="col xs-3 sm-3">
+            <div class="p-3">
+              <h6>Developer:</h6>
+              <div>David - s12842728</div>
+              <div>Jimmy - s12795968</div>
+            </div>
           </div>
         </div>
-      </form>
-      <br />
-      <label for="search-result" class="form-label">Result</label>
-      <table class="table table-striped" id="search-result">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Photo</th>
-            <th scope="col">Manager</th>
-            <th scope="col">Operation</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% data.forEach((element,i)=> { %>
+        <br />
+        <h6>There are <%= data.length %> inventory found.</h6>
+        <br />
+        <form>
+          <div class="row g-10 align-items-center">
+            <div class="col-auto">
+              <label for="search-input" class="col-form-label">Search</label>
+            </div>
+            <div class="col-auto">
+              <input
+                type="text"
+                id="search-input"
+                class="form-control"
+                name="search"
+                placeholder="Inventory Name"
+              />
+            </div>
+            <div class="col-1">
+              <input
+                type="submit"
+                class="btn btn-primary"
+                formaction="/inventory/search"
+                formmethod="get"
+              />
+            </div>
+            <div class="col-1">
+              <input
+                type="submit"
+                class="btn btn-info"
+                formaction="/inventory/index"
+                formmethod="get"
+                value="Reset"
+              />
+            </div>
+          </div>
+        </form>
+        <br />
+        <label for="search-result" class="form-label">Result</label>
+        <table class="table table-striped" id="search-result">
+          <thead>
             <tr>
-              <th scope="row">
-                <%= i %>
-              </th>
-              <td>
-                <%= element.name %>
-              </td>
-              <td>
-                <%= element.type %>
-              </td>
+              <th scope="col">#</th>
+              <th scope="col">Item Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Photo</th>
+              <th scope="col">Manager</th>
+              <th scope="col">Operation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% data.forEach((element,i)=> { %>
+            <tr>
+              <th scope="row"><%= i %></th>
+              <td><%= element.name %></td>
+              <td><%= element.type %></td>
               <td>
                 <% if (element.photo && element.photo_mimetype) { %>
-                  <img style="
+                <img
+                  style="
                     max-height: 62px;
                     width: auto;
                     object-fit: contain;
                     border-radius: 8px;
-                  " src="data:image/<%= element.photo_mimetype %>;base64, <%= element.photo %>" />
-                  <% } else { %> N/A <% } %>
+                  "
+                  src="data:image/<%= element.photo_mimetype %>;base64, <%= element.photo %>"
+                />
+                <% } else { %> N/A <% } %>
               </td>
+              <td><%= element.manager %></td>
               <td>
-                <%= element.manager %>
-              </td>
-              <td>
-                <a href="http://localhost:4000/inventory/info?id=<%= element.id %>" class="btn btn-outline-primary"
-                  role="button" id="inventory-details-btn-<%= element.id %> ">Details</a>
+                <a
+                  href="/inventory/info?id=<%= element.id %>"
+                  class="btn btn-outline-primary"
+                  role="button"
+                  id="inventory-details-btn-<%= element.id %> "
+                  >Details</a
+                >
               </td>
             </tr>
             <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </main>
+          </tbody>
+        </table>
+      </div>
+    </main>
 
-  <footer>
-    <%- include('../../partials/footer'); %>
-  </footer>
-</body>
-
+    <footer><%- include('../../partials/footer'); %></footer>
+  </body>
 </html>
