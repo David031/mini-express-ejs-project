@@ -10,7 +10,7 @@ import { login } from "./api/login.js";
 import { remove } from "./api/remove.js";
 import capitalizeFirstLetter from "./utils/capitalizeFirstLetter.js";
 import factoryToData from "./utils/factoryToData.js";
-
+import valueWrapper from "./utils/valueWrapper.js";
 const app = express();
 const port = process.env.PORT || 4000;
 const sessionKey = "skey";
@@ -40,31 +40,6 @@ app.use(
 
 app.get("/", function (req, res) {
   res.render("pages/main");
-});
-
-app.get("/test", function (req, res) {
-  const data = {
-    _id: "61a20e3f15c6335af430f12a",
-    name: "david",
-    type: "user",
-    quantity: "",
-    photo: "aba",
-    photo_mimetype: "jpg",
-    address: {
-      street: "aberdeen",
-      building: "bububu",
-      country: "Hong Kong",
-      zipcode: "ac",
-      coord: "",
-    },
-    manager: "jimmy",
-  };
-  edit(data);
-});
-
-app.get("/test2", function (req, res) {
-  list();
-  res.write("abc");
 });
 
 app.get("/about", function (req, res) {
@@ -139,17 +114,23 @@ app.get("/inventory/info", async function (req, res) {
     res.redirect("/login");
   } else {
     const id = req.query.id;
-    const isInValid = req.query.isInValid;
-    const data = await info(id);
-    const format_data = factoryToData(data);
-    res.render("pages/inventory/inventory_info", {
-      username: session.username,
-      data: format_data,
-      capitalizeFirstLetter,
-      id,
-      isInValid: isInValid ?? false,
-      isInValidCoord: !(!!format_data.latitude && !!format_data.longitude),
-    });
+    valueWrapper(
+      { id },
+      async () => {
+        const isInValid = req.query.isInValid;
+        const data = await info(id);
+        const format_data = factoryToData(data);
+        res.render("pages/inventory/inventory_info", {
+          username: session.username,
+          data: format_data,
+          capitalizeFirstLetter,
+          id,
+          isInValid: isInValid ?? false,
+          isInValidCoord: !(!!format_data.latitude && !!format_data.longitude),
+        });
+      },
+      res
+    );
   }
 });
 
@@ -186,6 +167,7 @@ app.post(
     }
   }
 );
+
 app.get("/inventory/edit", async function (req, res) {
   const { session } = req;
   if (!session.isAuth) {
@@ -193,12 +175,22 @@ app.get("/inventory/edit", async function (req, res) {
   } else {
     const id = req.query.id;
     const isInValid = req.query.isInValid;
-    const data = await info(id);
-    res.render("pages/inventory/inventory_edit", {
-      isInValid: isInValid ?? false,
-      data: factoryToData(data),
-      id,
-    });
+    valueWrapper(
+      { id },
+      async () => {
+        const data = await info(id);
+        if (session.username == data.manager) {
+          res.render("pages/inventory/inventory_edit", {
+            isInValid: isInValid ?? false,
+            data: factoryToData(data),
+            id,
+          });
+        } else {
+          res.redirect("/inventory/index");
+        }
+      },
+      res
+    );
   }
 });
 
@@ -231,9 +223,14 @@ app.post("/inventory/delete", async function (req, res) {
     res.redirect("/login");
   } else {
     const id = data.id;
-    const response = await remove(id);
-    if (response) {
-      res.redirect(`/inventory/index`);
+    const data = await info(id);
+    if (session.username == data.manager) {
+      const response = await remove(id);
+      if (response) {
+        res.redirect(`/inventory/index`);
+      } else {
+        res.redirect(`/inventory/info?id=${id}&isInValid=true`);
+      }
     } else {
       res.redirect(`/inventory/info?id=${id}&isInValid=true`);
     }
